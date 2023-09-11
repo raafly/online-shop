@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body{
+    font-family: 'Inter', sans-serif;
+
+}
+
+.navbar-fixed{
+    @apply fixed z-[9999] bg-white bg-opacity-80 shadow-lg;
+}
+
+.navbar-fixed #judul{
+    @apply text-primary;
+}
+
+.navbar-fixed .hamburger-line{
+    @apply bg-primary;
+}
+
+.hamburger-line {
+    @apply w-[28px] h-[3px] my-1.5 block bg-second;
+}
+
+.hamburger-active > span:nth-child(1) {
+    @apply rotate-45;
+}
+
+.hamburger-active > span:nth-child(2) {
+    @apply scale-0;
+}
+
+.hamburger-active > span:nth-child(3) {
+    @apply  -rotate-45;
+}
+
+html {
+    scroll-behavior: smooth;
+  }
+
+  
