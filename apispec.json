@@ -15,6 +15,9 @@
     "/register" : {
         "post" : {
             "tags": ["customers"],
+            "security": [{
+                "customerAuth": []
+            }],
             "summary": "user membuat account",
             "description": "Digunakan untuk mendaftarkan pengguna baru",
             "requestBody" : {
@@ -81,6 +84,9 @@
     "/login" : {
         "post" : {
             "tags": ["customers"],
+            "security": [{
+                "customerAuth": []
+            }],
             "summary": "user masuk ke akun",
             "description": "Digunakan untuk user yang telah daftar",
             "requestBody" : {
@@ -137,6 +143,9 @@
     "/products" : {
         "get": {
             "tags" : ["products"],
+            "security": [{
+                "customerAuth": []
+            }],
             "description": "api for get all products",
             "responses": {
                 "200" : {
@@ -187,6 +196,9 @@
         },
         "post" : {
             "tags": ["products"],
+            "security": [{
+                "customerAuth": []
+            }],
             "description": "api for create products",
             "requestBody" : {
                 "content": {
@@ -260,6 +272,9 @@
     "/products/{productId}" : {
         "get" : {
             "summary": "get products by id",
+            "security": [{
+                "customerAuth": []
+            }],
             "description": "api for get products by id",
             "tags": ["products"],
             "parameters": [
@@ -303,6 +318,9 @@
         },
         "put" : {
             "summary": "update products by id",
+            "security": [{
+                "customerAuth": []
+            }],
             "description": "api for update products by id",
             "tags": ["products"],
             "parameters": [
@@ -369,6 +387,9 @@
         },
         "delete" : {
             "summary": "delete products by id",
+            "security": [{
+                "customerAuth": []
+            }],
             "description": "delete for get products by id",
             "tags": ["products"],
             "parameters": [
@@ -402,6 +423,71 @@
                     "description": "products not found"
                 }
             }
+        }
+    },
+    "/carts/{customerId}" : {
+        "get" : {
+            "tags": ["carts"],
+            "security": [{
+                "customerAuth": []
+            }],
+            "description": "for get data carts",
+            "summary": "get carts by username",
+            "parameters": [
+                {
+                    "name": "customerId",
+                    "in": "path",
+                    "description": "customer id"
+                }
+            ],
+            "responses": {
+                "201" : {
+                    "description": "for get carts by username",
+                    "content": {
+                        "application/json" : {
+                            "schema" : {
+                               "type": "object",
+                               "properties": {
+                                "customerId" : {
+                                    "type": "string",
+                                    "description": "id use username"
+                                },
+                                "carts" : {
+                                    "type": "array",
+                                    "items" : {
+                                        "type": "object",
+                                        "properties": {
+                                            "id" : {
+                                                "type": "number"
+                                            },
+                                            "name" : {
+                                                "type": "string"
+                                            },
+                                            "description" : {
+                                                "type": "string"
+                                            },
+                                            "quantity" : {
+                                                "type": "integer"
+                                            },
+                                            "price" : {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                }
+                               }
+                            }
+                        }
+                    }
+                },
+                "404" : {
+                    "description": "belum memliki 1 product"
+                },
+                "500" : {
+                    "description": "internal server error"
+                }
+            }
+
         }
     }
   },
