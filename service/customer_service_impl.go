@@ -10,6 +10,8 @@ import (
 	"github.com/raafly/catering/model/domain"
 	"github.com/raafly/catering/model/web"
 	"github.com/raafly/catering/repository"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type CustomerServiceImpl struct {
@@ -36,10 +38,15 @@ func (service *CustomerServiceImpl) Register(ctx context.Context ,request web.Cu
 	defer helper.CommitOrRollback(tx)
 	helper.PanicIfError(err)
 
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
+    if err != nil {
+        panic(err)
+    }
+
 	customer := domain.Customers {
 		Username: request.Username,
 		Email: request.Email,
-		Password: request.Password,
+		Password: string(hashedPassword),
 	}
 
 	customer = service.CustomerRepository.Register(ctx, tx, customer)
@@ -49,19 +56,22 @@ func (service *CustomerServiceImpl) Register(ctx context.Context ,request web.Cu
 }
 
 func (service *CustomerServiceImpl) Login(ctx context.Context, request web.CustomerLoginRequest) web.LoginSuccess {
-	// validasi 
 	err := service.Validate.Struct(request)
 	helper.PanicIfError(err)
 
-	// ambil data user
-	customer := domain.Customers {
+	customerData := domain.Customers {
 		Email: request.Email,
 		Password: request.Password,
-	}	
-	
-	customer, err = service.CustomerRepository.Login(ctx, service.DB, customer)
+	}
+
+	customer, err := service.CustomerRepository.Login(ctx, service.DB, customerData)
 	if err != nil {
 		panic(exception.NewNotFoundError(err.Error()))
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(customer.Password), []byte(customerData.Password))
+	if err != nil {
+		panic(exception.NewNotMatchError(err.Error()))
 	}
 
 	return helper.ToCustomerResponseLogin(customer)

@@ -13,8 +13,33 @@ func ErrorHandle(w http.ResponseWriter, r *http.Request, err interface{}) {
 		return
 	}
 
+	if notMatchError(w, r, err) {
+		return
+	}
+
 	internalServerError(w, r, err) 
 
+}
+
+func notMatchError(w http.ResponseWriter, r *http.Request, err interface{}) bool {
+	exception, ok:= err.(NotMatchError)	
+	if ok {
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+
+		webResponse := web.WebResponse{
+			Code: http.StatusBadRequest,
+			Status: "Bad Request",
+			Data: nil,
+			Message: exception.Error,
+		}
+
+		helper.WriteToRequestBody(w, webResponse)
+		
+		return true
+	} else {
+		return false
+	}
 }
 
 func notFoundError(w http.ResponseWriter, r *http.Request, err interface{}) bool {

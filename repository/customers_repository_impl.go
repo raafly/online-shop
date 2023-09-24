@@ -29,8 +29,8 @@ func (repository *CustomerRepositoryImpl) Register(ctx context.Context, tx *sql.
 }
 
 func (repository *CustomerRepositoryImpl) Login(ctx context.Context, db *sql.DB, customer domain.Customers) (domain.Customers, error) {
-	SQL := "SELECT email, password, role FROM customers WHERE email = ? AND password = ?"
-	rows, err := db.QueryContext(ctx, SQL, customer.Email, customer.Password)
+	SQL := "SELECT email, password, role FROM customers WHERE email = ?"
+	rows, err := db.QueryContext(ctx, SQL, customer.Email)
 	helper.PanicIfError(err) 
 	defer rows.Close()
 
