@@ -23,7 +23,15 @@ var customerSet = wire.NewSet(
 	wire.Bind(new(service.CustomerService), new(*service.CustomerServiceImpl)),
 	controller.NewCustomerController,
 	wire.Bind(new(controller.CustomerController), new(*controller.CustomerControllerImpl)),
+)
 
+var productSet = wire.NewSet(
+	repository.NewProductRepository,
+	wire.Bind(new(repository.ProductRepository), new(*repository.ProductRepositoryImpl)),
+	service.NewProductService,
+	wire.Bind(new(service.ProductService), new(*service.ProductServiceImpl)),
+	controller.NewProductController,
+	wire.Bind(new(controller.ProductController), new(*controller.ProductControllerImpl)),	
 )
 
 func InitializedEvent() *http.Server {
@@ -31,7 +39,7 @@ func InitializedEvent() *http.Server {
 		config.NewDB,
 		validator.New,
 		route.NewRouter,
-		customerSet,
+		customerSet, productSet,
 		wire.Bind(new(http.Handler), new(*httprouter.Router)),
 		middleware.NewAuthMiddleware,
 		NewServer,

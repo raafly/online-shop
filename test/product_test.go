@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	_ "fmt"
 	"testing"
 	"time"
 
@@ -61,54 +62,68 @@ func NewDB() *sql.DB {
 
 // }
 
-func TestQueryCreateProduct(t *testing.T) {
-	ctx := context.Background()
-	db := NewDB()
+// func TestQueryCreateProduct(t *testing.T) {
+// 	ctx := context.Background()
+// 	db := NewDB()
 
-	product := domain.Products {
-		Name: "tahu",
-		Description: "tahu goreng",
+// 	product := domain.Products {
+// 		Name: "tahu",
+// 		Description: "tahu goreng",
+// 		Quantity: 70,
+// 		Price: 9.000,
+// 	}
+
+// 	products := repository.NewProducRepository().Create(ctx, db, product)
+// 	fmt.Println(products)
+// }
+
+// func TestGetQueryProduct(t *testing.T) {
+// 	ctx := context.Background()
+// 	db := NewDB()
+
+// 	products, err := repository.NewProducRepository().GetById(ctx, db, 1)
+// 	helper.PanicIfError(err)
+// 	fmt.Println(products)
+// }
+
+// func TestUpdateQueryProduct(t *testing.T) {
+// 	ctx := context.Background()
+// 	db := NewDB()
+
+// 	product := domain.Products {
+// 		Id: 1,
+// 		Price: 20.000,
+// 	}
+
+// 	products := repository.NewProducRepository().Update(ctx, db, product)
+// 	fmt.Println(products)
+// }
+
+// func TestGetAllQueryProduct(t *testing.T) {
+// 	ctx := context.Background()
+// 	db := NewDB()
+
+// 	products := repository.NewProducRepository().GetAll(ctx, db)
+// 	fmt.Println(products)
+// }
+
+// func TestDeleteQueryProduct(t *testing.T) {
+// 	ctx := context.Background()
+// 	db := NewDB()
+
+// 	repository.NewProducRepository().Delete(ctx, db, "tempe")
+// }
+
+func TestUp(t *testing.T) {
+	db := NewDB()
+	ctx := context.Background()
+	product := domain.Products{
+		Id: 5,
+		Price: 100.0000,
 		Quantity: 70,
-		Price: 9.000,
 	}
 
-	products := repository.NewProducRepository().Create(ctx, db, product)
-	fmt.Println(products)
-}
+	product = repository.NewProductRepository().Update(ctx, db, product)
+	fmt.Println(product)
 
-func TestGetQueryProduct(t *testing.T) {
-	ctx := context.Background()
-	db := NewDB()
-
-	products, err := repository.NewProducRepository().GetById(ctx, db, 1)
-	helper.PanicIfError(err)
-	fmt.Println(products)
-}
-
-func TestUpdateQueryProduct(t *testing.T) {
-	ctx := context.Background()
-	db := NewDB()
-
-	product := domain.Products {
-		Id: 1,
-		Price: 20.000,
-	}
-
-	products := repository.NewProducRepository().Update(ctx, db, product)
-	fmt.Println(products)
-}
-
-func TestGetAllQueryProduct(t *testing.T) {
-	ctx := context.Background()
-	db := NewDB()
-
-	products := repository.NewProducRepository().GetAll(ctx, db)
-	fmt.Println(products)
-}
-
-func TestDeleteQueryProduct(t *testing.T) {
-	ctx := context.Background()
-	db := NewDB()
-
-	repository.NewProducRepository().Delete(ctx, db, "tempe")
 }

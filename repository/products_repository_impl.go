@@ -9,14 +9,14 @@ import (
 	"github.com/raafly/catering/model/domain"
 )
 
-type ProducRepositoryImpl struct {
+type ProductRepositoryImpl struct {
 }
 
-func NewProducRepository() *ProducRepositoryImpl {
-	return &ProducRepositoryImpl{}
+func NewProductRepository() *ProductRepositoryImpl {
+	return &ProductRepositoryImpl{}
 }
 
-func (repository *ProducRepositoryImpl) GetAll(ctx context.Context, db *sql.DB) []domain.Products {
+func (repository *ProductRepositoryImpl) GetAll(ctx context.Context, db *sql.DB) []domain.Products {
 	SQL := "SELECT id, name, description, quantity, price FROM products"
 	rows, err := db.QueryContext(ctx, SQL)
 	helper.PanicIfError(err)
@@ -33,7 +33,7 @@ func (repository *ProducRepositoryImpl) GetAll(ctx context.Context, db *sql.DB) 
 	return products
 }
 
-func (repository *ProducRepositoryImpl) Create(ctx context.Context, db *sql.DB, product domain.Products) domain.Products {
+func (repository *ProductRepositoryImpl) Create(ctx context.Context, db *sql.DB, product domain.Products) domain.Products {
 	SQL := "INSERT INTO products(name, description, quantity, price) VALUES(?, ?, ?, ?)"
 	result, err := db.ExecContext(ctx, SQL, product.Name, product.Description, product.Quantity, product.Price)
 	helper.PanicIfError(err)
@@ -45,7 +45,7 @@ func (repository *ProducRepositoryImpl) Create(ctx context.Context, db *sql.DB, 
 	return product 
 }
 
-func (repository *ProducRepositoryImpl)	GetById(ctx context.Context, db *sql.DB, productId int) (domain.Products, error) {
+func (repository *ProductRepositoryImpl) GetById(ctx context.Context, db *sql.DB, productId int) (domain.Products, error) {
 	SQL := "SELECT id, name, description, quantity, price FROM products WHERE id = ?"
 	rows, err := db.QueryContext(ctx, SQL, productId)
 	helper.PanicIfError(err)
@@ -61,19 +61,16 @@ func (repository *ProducRepositoryImpl)	GetById(ctx context.Context, db *sql.DB,
 	}
 }
 
-func (repository *ProducRepositoryImpl)	Update(ctx context.Context, db *sql.DB, product domain.Products) domain.Products {
-	SQL := "UPDATE products SET price = ?, quantity = ?  WHERE id = ?"
-	_, err := db.ExecContext(ctx, SQL, &product.Price, &product.Quantity ,&product.Id)
+func (repository *ProductRepositoryImpl) Update(ctx context.Context, db *sql.DB, product domain.Products) domain.Products {
+	SQL := "UPDATE products SET price = ?, quantity = ? WHERE id = ?"
+	_, err := db.ExecContext(ctx, SQL, product.Price, product.Quantity ,product.Id)
 	helper.PanicIfError(err)
 
 	return product
 }
 
-func (repository *ProducRepositoryImpl)	Delete(ctx context.Context, db *sql.DB, productName string) {
-	SQL := "DELETE FROM products WHERE name = ?"
-	_, err := db.ExecContext(ctx, SQL, productName)
+func (repository *ProductRepositoryImpl) Delete(ctx context.Context, db *sql.DB, productId int) {
+	SQL := "DELETE FROM products WHERE id = ?"
+	_, err := db.ExecContext(ctx, SQL, productId)
 	helper.PanicIfError(err)
 }
- 
-
- 

@@ -1,6 +1,0 @@
-// ambil inputan json
-	var inputUser domain.Customers 
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&inputUser)
-	defer r.Body.Close()
-	helper.PanicIfError(err)

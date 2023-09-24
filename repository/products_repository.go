@@ -10,6 +10,6 @@ type ProductRepository interface {
 	GetAll(ctx context.Context, db *sql.DB) []domain.Products
 	Create(ctx context.Context, db *sql.DB, product domain.Products) domain.Products
 	GetById(ctx context.Context, db *sql.DB, productId int) (domain.Products, error)
-	Update(ctx context.Context, db *sql.DB, product domain.Products) (domain.Products, error)
-	Delete(ctx context.Context, db *sql.DB, productName string) 
+	Update(ctx context.Context, db *sql.DB, product domain.Products) domain.Products
+	Delete(ctx context.Context, db *sql.DB, productId int) 
 }

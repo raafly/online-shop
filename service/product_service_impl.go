@@ -18,7 +18,7 @@ type ProductServiceImpl struct {
 	Validate *validator.Validate
 }
 
-func NewProductServiceImpl(productRepository repository.ProductRepository, DB *sql.DB, validate *validator.Validate) *ProductServiceImpl {
+func NewProductService(productRepository repository.ProductRepository, DB *sql.DB, validate *validator.Validate) *ProductServiceImpl {
 	return &ProductServiceImpl{
 		ProductRepository: productRepository,
 		DB: DB,
@@ -26,12 +26,9 @@ func NewProductServiceImpl(productRepository repository.ProductRepository, DB *s
 	}
 }
 
-// func (service *ProductServiceImpl) GetAll(ctx context.Context, db *sql.DB) []web.ProductResponse {
-// 	products := service.ProductRepository.GetAll(ctx, db)
-// 	return helper.ToProductReponse(products)
-// }
-func (service *ProductServiceImpl) GetAll(ctx context.Context, db *sql.DB) []web.ProductResponse {
-	products := service.ProductRepository.GetAll(ctx, db)
+
+func (service *ProductServiceImpl) GetAll(ctx context.Context) []web.ProductResponse {
+	products := service.ProductRepository.GetAll(ctx, service.DB)
 	return helper.ToProductResponses(products)
 }
 
@@ -47,13 +44,11 @@ func (service *ProductServiceImpl) Create(ctx context.Context, request web.Produ
 	}	
 	
 	customer := service.ProductRepository.Create(ctx, service.DB, product)
-	helper.PanicIfError(err)
-
 	return helper.ToProductReponse(customer)
 }
 
-func (service *ProductServiceImpl) GetById(ctx context.Context, db *sql.DB, productId int) web.ProductResponse {
-	product, err := service.ProductRepository.GetById(ctx, db, productId)
+func (service *ProductServiceImpl) GetById(ctx context.Context, productId int) web.ProductResponse {
+	product, err := service.ProductRepository.GetById(ctx, service.DB, productId)
 	if err != nil {
 		panic(exception.NewNotFoundError(err.Error()))
 	}
@@ -61,21 +56,27 @@ func (service *ProductServiceImpl) GetById(ctx context.Context, db *sql.DB, prod
 
 }
 
-func (service *ProductServiceImpl) Update(ctx context.Context, db *sql.DB ,request web.ProductsRequest) web.ProductResponse {
+func (service *ProductServiceImpl) Update(ctx context.Context, request web.ProductUpdateRequest) web.ProductResponse {
 	err := service.Validate.Struct(request)
 	helper.PanicIfError(err)
 
-	product, err := service.ProductRepository.GetById(ctx, db, request.Id)
-	helper.PanicIfError(err)
-	
-	product, err = service.ProductRepository.Update(ctx, db, product)
-	helper.PanicIfError(err)
-	
-	
-	return helper.ToProductReponse(product)
+	product, err := service.ProductRepository.GetById(ctx, service.DB, request.Id)
+	if err != nil {
+		panic(exception.NewNotFoundError(err.Error()))
+	}
 
+	product.Price = request.Price
+	product.Quantity = request.Quantity
+
+	product = service.ProductRepository.Update(ctx, service.DB, product)
+	return helper.ToProductReponse(product)
 }
 
-func (service *ProductServiceImpl) Delete(ctx context.Context, db *sql.DB, productName string) {
-	service.ProductRepository.Delete(ctx, db, productName)
+func (service *ProductServiceImpl) Delete(ctx context.Context, productId int) {
+	product, err := service.ProductRepository.GetById(ctx, service.DB, productId)
+	if err != nil {
+		panic(exception.NewNotFoundError(err.Error()))
+	}
+	
+	service.ProductRepository.Delete(ctx, service.DB, product.Id)
 }
