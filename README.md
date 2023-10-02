@@ -21,4 +21,4 @@ This project has 4 Domain layer :
 - Delivery Layer
 
 #### The diagram: 
-![golang clean architecture](https://github.com/bxcodec/go-clean-arch/raw/master/clean-arch.png)
+![golang clean architecture](https://github.com/raafly/online-shop/blob/main/layer.png)
