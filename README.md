@@ -17,8 +17,8 @@ existing features
 This project has 4 Domain layer :
 - Models Layer
 - Repository Layer
-- Usecase Layer
-- Delivery Layer
+- Service Layer
+- Contoller Layer
 
 #### The diagram: 
 ![golang clean architecture](https://github.com/raafly/online-shop/blob/main/layer.png)
