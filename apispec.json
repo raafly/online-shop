@@ -419,14 +419,83 @@
             }
         }
     },
-    "/carts/{customerId}" : {
-        "get" : {
-            "tags": ["carts"],
+    "/orders" : {
+        "post" : {
+            "tags" : ["orders"],
             "security": [{
                 "customerAuth": []
             }],
-            "description": "for get data carts",
-            "summary": "get carts by username",
+            "summary": "create new order",
+            "description": "for create new order",
+            "requestBody" : {
+                "content": {
+                    "application/json" : {
+                        "schema" : {
+                            "type": "object",
+                            "properties": {
+                                "customerId" : {
+                                    "type": "string"
+                                },
+                                "order" : {
+                                    "type": "array",
+                                    "items" : {
+                                        "type": "object",
+                                        "properties": {
+                                            "productId" : {
+                                                "type": "integer"
+                                            },
+                                            "quantity" : {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                },
+                                "address" : {
+                                    "type": "array",
+                                    "items" : {
+                                        "type": "object",
+                                        "properties": {
+                                            "address" : {
+                                                "type": "string"
+                                            },
+                                            "city" : {
+                                                "type": "string"
+                                            },
+                                            "houseNumber" : {
+                                                "type": "integer"
+                                            },
+                                            "noTelp" : {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "201" : {
+                    "description": "order succes created"
+                },
+                "404" : {
+                    "description": "invalid order, please check the order again"
+                },
+                "500" : {
+                    "description": "the server is busy, please check your order in a while"
+                }
+            }
+        }
+    },
+    "/orders/{customerId}" : {
+        "get" : {
+            "tags": ["orders"],
+            "security": [{
+                "customerAuth": []
+            }],
+            "description": "for get detail order",
+            "summary": "get order detail",
             "parameters": [
                 {
                     "name": "customerId",
@@ -436,7 +505,7 @@
             ],
             "responses": {
                 "201" : {
-                    "description": "for get carts by username",
+                    "description": "for get order by username",
                     "content": {
                         "application/json" : {
                             "schema" : {
@@ -446,18 +515,18 @@
                                     "type": "string",
                                     "description": "id use username"
                                 },
-                                "carts" : {
+                                "order_id" : {
+                                    "type": "integer"
+                                },
+                                "orders_item" : {
                                     "type": "array",
                                     "items" : {
                                         "type": "object",
                                         "properties": {
-                                            "id" : {
-                                                "type": "number"
+                                            "productId" : {
+                                                "type": "integer"
                                             },
                                             "name" : {
-                                                "type": "string"
-                                            },
-                                            "description" : {
                                                 "type": "string"
                                             },
                                             "quantity" : {
@@ -468,6 +537,33 @@
                                             }
                                         }
                                     }
+                                },
+                                "total_amount" : {
+                                    "type": "integer"
+                                },
+                                "address" : {
+                                    "type": "array",
+                                    "items" : {
+                                        "type": "object",
+                                        "properties": {
+                                            "address" : {
+                                                "type": "string"
+                                            },
+                                            "city" : {
+                                                "type": "string"
+                                            },
+                                            "houseNumber" : {
+                                                "type": "integer"
+                                            },
+                                            "noTelp" : {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                },
+                                "status" : {
+                                    "type": "string",
+                                    "description": "in delivery"
                                 }
                                }
                             }
@@ -475,13 +571,76 @@
                     }
                 },
                 "404" : {
-                    "description": "belum memliki 1 product"
+                    "description": "id order not found, make sure you already order"
                 },
                 "500" : {
-                    "description": "internal server error"
+                    "description": "the server is busy, please check your order in a while"
                 }
             }
 
+        },
+        "put" : {
+            "tags": ["orders"],
+            "security": [{
+                "customerAuth": []
+            }],
+            "summary": "update order",
+            "description": "for update customer order",
+            "parameters": [
+                {
+                    "name": "productId",
+                    "in": "path",
+                    "description": "products id"
+                }
+            ],
+            "requestBody" : {
+                "content": {
+                    "application/json" : {
+                        "schema" : {
+                            "type": "object",
+                            "properties": {
+                                "quantity" : {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "201" : {
+                    "description": "success update"
+                },
+                "404" : {
+                    "description": "please double check your order"
+                },
+                "500" : {
+                    "description": "the server is busy, please check your order in a while"
+                }
+            }
+        },
+        "delete" : {
+            "tags": ["orders"],
+            "security": [{
+                "customerAuth": []
+            }],
+            "summary": "delete order",
+            "description": "for delete order",
+            "parameters": [
+                {
+                    "name": "orderId",
+                    "in": "path",
+                    "description": "orderId"
+                }
+            ],
+            "responses": {
+                "201" : {
+                    "description": "succes delete order"
+                },
+                "404" : {
+                    "description": "you haven't ordered anything yet"
+                }
+            }
         }
     }
   },
