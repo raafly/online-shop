@@ -1,0 +1,782 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "API For Toko Online",
+    "description": "API untuk toko online",
+    "version": "1.0",
+    "contact": {
+        "name": "Rafly Nur Ramadhani",
+        "email": "rafliexecutor375@gmail.com",
+        "url": "https://www.raaflynr.com"
+    }
+  },
+  "servers": [{ "url": "http://localhost:3000/api" }],
+  "paths": { 
+    "/register" : {
+        "post" : {
+            "tags": ["customers"],
+            "security": [{
+                "customerAuth": []
+            }],
+            "summary": "user membuat account",
+            "description": "Digunakan untuk mendaftarkan pengguna baru",
+            "requestBody" : {
+                "required": true,
+                "content": {
+                    "application/json" : {
+                        "schema" : {
+                            "type": "object",
+                            "properties": {
+                                "username" : {
+                                    "type": "string",
+                                    "required": true,
+                                    "minLength": 10
+                                },
+                                "email" : {
+                                    "type": "string",
+                                    "required": true,
+                                    "minLength": 10
+                                },
+                                "password" : {
+                                    "type": "string",
+                                    "required": true,
+                                    "minLength": 10
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "201" : {
+                    "description": "berhasil membuat akun",
+                    "content": {
+                        "application/json" : {
+                            "schema" : {
+                                "type": "array",
+                                "items" : {
+                                    "type": "object",
+                                    "properties": {
+                                        "username" : {
+                                            "type": "string"
+                                        },
+                                        "email" : {
+                                            "type": "string"
+                                        },
+                                        "password" : {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400" : {
+                    "description": "data yang dimasukan salah"
+                },
+                "500" : {
+                    "description": "server sedang bermasalah"
+                }
+            }
+        }
+    },
+    "/login" : {
+        "post" : {
+            "tags": ["customers"],
+            "security": [{
+                "customerAuth": []
+            }],
+            "summary": "user masuk ke akun",
+            "description": "Digunakan untuk user yang telah daftar",
+            "requestBody" : {
+                "required": true,
+                "content": {
+                    "application/json" : {
+                        "schema" : {
+                            "type": "object",
+                            "properties": {
+                                "email" : {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "password" : {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200" : {
+                    "description": "berhasil masuk ke akun",
+                    "content": {
+                        "application/json" : {
+                            "schema" : {
+                                "type": "array",
+                                "items" : {
+                                    "type": "object",
+                                    "properties": {
+                                        "email" : {
+                                            "type": "string"
+                                        },
+                                        "role" : {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400" : {
+                    "description": "username atau password salah"
+                },
+                "500" : {
+                    "description": "server sedang bermasalah"
+                }
+            }
+        }
+    },
+    "/users/{customerId}" : {
+        "get" : {
+            "tags": ["customers"],
+            "summary": "get by id",
+            "description": "for get customer account use id",
+            "parameters": [
+                {
+                    "name": "customerId",
+                    "in": "path",
+                    "description": "customer id"
+                }
+            ],
+            "responses": {
+                "201" : {
+                    "description": "succces get account",
+                    "content": {
+                        "application/json" : {
+                            "schema" : {
+                                "type": "object",
+                                "properties": {
+                                    "username" : {
+                                        "type": "string"
+                                    },
+                                    "email" : {
+                                        "type": "string"
+                                    },
+                                    "address" : {
+                                        "type": "string"
+                                    },
+                                    "noTelp" : {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "404" : {
+                    "description": "account not found"
+                },
+                "500" : {
+                    "description": "server is busy"
+                }
+            }
+
+        },
+        "put" : {
+            "tags": ["customers"],
+            "summary": "update account",
+            "security": [{
+                "customerAuth": []
+            }],
+            "parameters": [
+                {
+                    "name": "customerId",
+                    "in": "path",
+                    "description": "update account customer"
+                }
+            ],
+            "requestBody" : {
+                "content": {
+                    "application/json" : {
+                        "schema" : {
+                            "type": "object",
+                            "properties": {
+                                "address" : {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "201" : {
+                    "description": "succes update account",
+                    "content": {
+                        "application/json" : {
+                            "schema" : {
+                                "type": "object",
+                                "properties": {
+                                    "address" : {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "404" : {
+                    "description": "account not found"
+                },
+                "500" : {
+                    "description": "server is busy"
+                }
+            }
+        },
+        "delete" : {
+            "tags": ["customers"],
+            "security": [{
+                "customerAuth": []
+            }],
+            "summary": "delete account",
+            "description": "for delete account",
+            "parameters": [
+                {
+                    "name": "customerId",
+                    "in": "path",
+                    "description": "delete account customer"
+                }
+            ],
+            "responses": {
+                "201" : {
+                    "description": "succes delete account"
+                },
+                "404" : {
+                    "description": "user not found"
+                },
+                "500" : {
+                    "description": "server is busy"
+                }
+            }
+
+        }
+    },
+    "/products" : {
+        "get": {
+            "tags" : ["products"],
+            "security": [{
+                "customerAuth": []
+            }],
+            "description": "api for get all products",
+            "responses": {
+                "200" : {
+                    "description": "success get all products",
+                    "content": {
+                        "application/json" : {
+                            "schema" : {
+                                "type": "object",
+                                "properties": {
+                                    "code" : {
+                                        "type": "number"
+                                    },
+                                    "status" : {
+                                        "type": "string"
+                                    },
+                                    "data" : {
+                                        "type": "array",
+                                        "items" : {
+                                            "type": "object",
+                                            "properties": {
+                                                "id" : {
+                                                    "type": "number"
+                                                },
+                                                "name" : {
+                                                    "type": "string"
+                                                },
+                                                "description" : {
+                                                    "type": "string"
+                                                },
+                                                "quantity" : {
+                                                    "type": "integer"
+                                                },
+                                                "price" : {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "500" : {
+                    "description": "server busy"
+                }
+            }
+        },
+        "post" : {
+            "tags": ["products"],
+            "security": [{
+                "customerAuth": []
+            }],
+            "description": "api for create products",
+            "requestBody" : {
+                "content": {
+                   "application/json" : {
+                    "schema" : {
+                        "type": "object",
+                        "properties": {
+                            "name" : {
+                                "type": "string"
+                            },
+                            "description" : {
+                                "type": "string"
+                            },
+                            "quantity" : {
+                                "type": "integer"
+                            },
+                            "price" : {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                   }
+                }
+            },
+            "responses": {
+                "200" : {
+                    "description": "success get all products",
+                    "content": {
+                        "application/json" : {
+                            "schema" : {
+                                "type": "object",
+                                "properties": {
+                                    "code" : {
+                                        "type": "number"
+                                    },
+                                    "status" : {
+                                        "type": "string"
+                                    },
+                                    "data" : {
+                                        "type": "array",
+                                        "items" : {
+                                            "type": "object",
+                                            "properties": {
+                                                "id" : {
+                                                    "type": "number"
+                                                },
+                                                "name" : {
+                                                    "type": "string"
+                                                },
+                                                "description" : {
+                                                    "type": "string"
+                                                },
+                                                "quantity" : {
+                                                    "type": "integer"
+                                                },
+                                                "price" : {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+         
+    },
+    "/products/{productId}" : {
+        "get" : {
+            "summary": "get products by id",
+            "security": [{
+                "customerAuth": []
+            }],
+            "description": "api for get products by id",
+            "tags": ["products"],
+            "parameters": [
+                {
+                    "name": "productId",
+                    "in": "path",
+                    "description": "products id"
+                }
+            ],
+            "responses": {
+                "200" : {
+                    "description": "success get products by id",
+                    "content": {
+                        "application/json" : {
+                         "schema" : {
+                             "type": "object",
+                             "properties": {
+                                 "name" : {
+                                     "type": "string"
+                                 },
+                                 "description" : {
+                                     "type": "string"
+                                 },
+                                 "quantity" : {
+                                     "type": "integer"
+                                 },
+                                 "price" : {
+                                     "type": "integer"
+                                 }
+                             }
+                         }
+                        }
+                     }
+                    
+                },
+                "404" : {
+                    "description": "products not found"
+                }
+
+            }
+        },
+        "put" : {
+            "summary": "update products by id",
+            "security": [{
+                "customerAuth": []
+            }],
+            "description": "api for update products by id",
+            "tags": ["products"],
+            "parameters": [
+                {
+                    "name": "productId",
+                    "in": "path",
+                    "description": "products id"
+                }
+            ],
+            "requestBody" : {
+                "content": {
+                    "application/json" : {
+                        "schema" : {
+                            "type": "object",
+                            "properties": {
+                                "quantity" : {
+                                    "type": "integer"
+                                },
+                                "price" : {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200" : {
+                    "description": "success get products by id",
+                    "content": {
+                        "application/json" : {
+                         "schema" : {
+                             "type": "object",
+                             "properties": {
+                                 "name" : {
+                                     "type": "string"
+                                 },
+                                 "description" : {
+                                     "type": "string"
+                                 },
+                                 "quantity" : {
+                                     "type": "integer"
+                                 },
+                                 "price" : {
+                                     "type": "integer"
+                                 }
+                             }
+                         }
+                        }
+                     }
+                    
+                },
+                "404" : {
+                    "description": "products not found"
+                }
+
+            }            
+        },
+        "delete" : {
+            "summary": "delete products by id",
+            "security": [{
+                "customerAuth": []
+            }],
+            "description": "delete for get products by id",
+            "tags": ["products"],
+            "parameters": [
+                {
+                    "name": "productId",
+                    "in": "path",
+                    "description": "delete id"
+                }
+            ],
+            "responses": {
+                "200" : {
+                    "description": "success get products by id",
+                    "content": {
+                        "application/json" : {
+                         "schema" : {
+                             "type": "object",
+                             "properties": {
+                                "code" : {
+                                    "type": "number"
+                                },
+                                "status" : {
+                                    "type": "string"
+                                }
+                             }
+                         }
+                        }
+                     }
+                    
+                },
+                "404" : {
+                    "description": "products not found"
+                }
+            }
+        }
+    },
+    "/orders" : {
+        "post" : {
+            "tags" : ["orders"],
+            "security": [{
+                "customerAuth": []
+            }],
+            "summary": "create new order",
+            "description": "for create new order",
+            "requestBody" : {
+                "content": {
+                    "application/json" : {
+                        "schema" : {
+                            "type": "object",
+                            "properties": {
+                                "customerId" : {
+                                    "type": "string"
+                                },
+                                "order" : {
+                                    "type": "array",
+                                    "items" : {
+                                        "type": "object",
+                                        "properties": {
+                                            "productId" : {
+                                                "type": "integer"
+                                            },
+                                            "quantity" : {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                },
+                                "address" : {
+                                    "type": "array",
+                                    "items" : {
+                                        "type": "object",
+                                        "properties": {
+                                            "address" : {
+                                                "type": "string"
+                                            },
+                                            "city" : {
+                                                "type": "string"
+                                            },
+                                            "houseNumber" : {
+                                                "type": "integer"
+                                            },
+                                            "noTelp" : {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "201" : {
+                    "description": "order succes created"
+                },
+                "404" : {
+                    "description": "invalid order, please check the order again"
+                },
+                "500" : {
+                    "description": "the server is busy, please check your order in a while"
+                }
+            }
+        }
+    },
+    "/orders/{customerId}" : {
+        "get" : {
+            "tags": ["orders"],
+            "security": [{
+                "customerAuth": []
+            }],
+            "description": "for get detail order",
+            "summary": "get order detail",
+            "parameters": [
+                {
+                    "name": "customerId",
+                    "in": "path",
+                    "description": "customer id"
+                }
+            ],
+            "responses": {
+                "201" : {
+                    "description": "for get order by username",
+                    "content": {
+                        "application/json" : {
+                            "schema" : {
+                               "type": "object",
+                               "properties": {
+                                "customerId" : {
+                                    "type": "string",
+                                    "description": "id use username"
+                                },
+                                "order_id" : {
+                                    "type": "integer"
+                                },
+                                "orders_item" : {
+                                    "type": "array",
+                                    "items" : {
+                                        "type": "object",
+                                        "properties": {
+                                            "productId" : {
+                                                "type": "integer"
+                                            },
+                                            "name" : {
+                                                "type": "string"
+                                            },
+                                            "quantity" : {
+                                                "type": "integer"
+                                            },
+                                            "price" : {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                },
+                                "total_amount" : {
+                                    "type": "integer"
+                                },
+                                "address" : {
+                                    "type": "array",
+                                    "items" : {
+                                        "type": "object",
+                                        "properties": {
+                                            "address" : {
+                                                "type": "string"
+                                            },
+                                            "city" : {
+                                                "type": "string"
+                                            },
+                                            "houseNumber" : {
+                                                "type": "integer"
+                                            },
+                                            "noTelp" : {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                },
+                                "status" : {
+                                    "type": "string",
+                                    "description": "in delivery"
+                                }
+                               }
+                            }
+                        }
+                    }
+                },
+                "404" : {
+                    "description": "id order not found, make sure you already order"
+                },
+                "500" : {
+                    "description": "the server is busy, please check your order in a while"
+                }
+            }
+
+        },
+        "put" : {
+            "tags": ["orders"],
+            "security": [{
+                "customerAuth": []
+            }],
+            "summary": "update order",
+            "description": "for update customer order",
+            "parameters": [
+                {
+                    "name": "productId",
+                    "in": "path",
+                    "description": "products id"
+                }
+            ],
+            "requestBody" : {
+                "content": {
+                    "application/json" : {
+                        "schema" : {
+                            "type": "object",
+                            "properties": {
+                                "quantity" : {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "201" : {
+                    "description": "success update"
+                },
+                "404" : {
+                    "description": "please double check your order"
+                },
+                "500" : {
+                    "description": "the server is busy, please check your order in a while"
+                }
+            }
+        },
+        "delete" : {
+            "tags": ["orders"],
+            "security": [{
+                "customerAuth": []
+            }],
+            "summary": "delete order",
+            "description": "for delete order",
+            "parameters": [
+                {
+                    "name": "orderId",
+                    "in": "path",
+                    "description": "orderId"
+                }
+            ],
+            "responses": {
+                "201" : {
+                    "description": "succes delete order"
+                },
+                "404" : {
+                    "description": "you haven't ordered anything yet"
+                }
+            }
+        }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+        "customerAuth" : {
+            "description": "authentication for login",
+            "type": "apiKey",
+            "in": "header",
+            "name": "X-API-Key"
+        }
+    }
+  }
+}
