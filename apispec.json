@@ -559,7 +559,7 @@
                             "type": "object",
                             "properties": {
                                 "customerId" : {
-                                    "type": "string"
+                                    "type": "integer"
                                 },
                                 "order" : {
                                     "type": "array",
@@ -575,25 +575,8 @@
                                         }
                                     }
                                 },
-                                "address" : {
-                                    "type": "array",
-                                    "items" : {
-                                        "type": "object",
-                                        "properties": {
-                                            "address" : {
-                                                "type": "string"
-                                            },
-                                            "city" : {
-                                                "type": "string"
-                                            },
-                                            "houseNumber" : {
-                                                "type": "integer"
-                                            },
-                                            "noTelp" : {
-                                                "type": "integer"
-                                            }
-                                        }
-                                    }
+                                "note" : {
+                                    "type": "string"
                                 }
                             }
                         }
@@ -602,7 +585,59 @@
             },
             "responses": {
                 "201" : {
-                    "description": "order succes created"
+                    "description": "order succes created",
+                    "content": {
+                        "application/json" : {
+                            "schema" : {
+                               "type": "object",
+                               "properties": {
+                                    "customerId" : {
+                                        "type": "integer"
+                                    },
+                                    "address" : {
+                                        "type": "array",
+                                        "items" : {
+                                            "type": "object",
+                                            "properties": {
+                                                "street" : {
+                                                    "type": "string"
+                                                },
+                                                "houseNum" : {
+                                                    "type": "integer"
+                                                },
+                                                "noTelp" : {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "orders" : {
+                                        "type": "array",
+                                        "items" : {
+                                            "properties": {
+                                                "name" :  {
+                                                    "type": "string"
+                                                },
+                                                "price" : {
+                                                    "type": "integer"
+                                                },
+                                                "quantity" : {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "note" : {
+                                        "type": "string"
+                                    },
+                                    "orderStatus" : {
+                                        "type": "string"
+                                    }
+                               }
+                            }
+                        }
+                    }
+
                 },
                 "404" : {
                     "description": "invalid order, please check the order again"
@@ -637,8 +672,7 @@
                                "type": "object",
                                "properties": {
                                 "customerId" : {
-                                    "type": "string",
-                                    "description": "id use username"
+                                    "type": "integer"
                                 },
                                 "order_id" : {
                                     "type": "integer"
