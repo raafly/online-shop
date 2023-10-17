@@ -34,7 +34,12 @@ func main() {
 	productService := service.NewProductService(productRepository, db, validate)
 	productController := controller.NewProductController(productService)
 
-	router := route.NewRouter(customerController, productController)
+	orderRepository := repository.NewOrderRepositoryImpl()
+	orderService := service.NewOrderServiceImpl(orderRepository, db, validate)
+	ordderController := controller.NewOrderController(orderService)
+	
+
+	router := route.NewRouter(customerController, productController, ordderController)
 	authMiddleware := middleware.NewAuthMiddleware(router)
 
 	server := http.Server{

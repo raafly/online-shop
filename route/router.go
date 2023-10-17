@@ -6,7 +6,7 @@ import (
 	"github.com/raafly/catering/exception"
 )
 
-func NewRouter(customerController controller.CustomerController, productController controller.ProductController) *httprouter.Router {
+func NewRouter(customerController controller.CustomerController, productController controller.ProductController, orderController controller.OrderController) *httprouter.Router {
 	router := httprouter.New()
 
 	router.POST("/api/register", customerController.Register)
@@ -20,6 +20,8 @@ func NewRouter(customerController controller.CustomerController, productControll
 	router.GET("/api/products/:productId", productController.GetById)
 	router.PUT("/api/products/:productId", productController.Update)
 	router.DELETE("/api/products/:productId", productController.Delete)
+
+	router.POST("/api/orders", orderController.Create)
 
 	router.PanicHandler = exception.ErrorHandle
 

@@ -40,3 +40,9 @@ func ToProductResponses(categories []domain.Products) []web.ProductResponse {
 	return productResponses
 }
 
+func ToOrderReponse(order domain.Orders) web.OrderSuccess {
+	return web.OrderSuccess{
+		Id_product: order.Id_product,
+		Note: order.Note,
+	}
+}
