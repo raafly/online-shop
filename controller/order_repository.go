@@ -6,5 +6,6 @@ import (
 )
 
 type OrderController interface {
-	Create(w http.ResponseWriter, r *http.Request, Param httprouter.Params)
+	Create(w http.ResponseWriter, r *http.Request, Params httprouter.Params)
+	GetById(w http.ResponseWriter, r *http.Request, Params httprouter.Params)
 }

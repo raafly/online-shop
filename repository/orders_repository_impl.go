@@ -3,6 +3,8 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"errors"
+	"log"
 
 	"github.com/raafly/catering/helper"
 	"github.com/raafly/catering/model/domain"
@@ -25,4 +27,22 @@ func (repository *OrderRepositoryImpl) Create(ctx context.Context, tx *sql.Tx, o
 
 	order.Id_order = int(id)
 	return order
+}
+
+func (repository *OrderRepositoryImpl) GetById(ctx context.Context, tx *sql.Tx, orderId int) (domain.Orders_detail, error) {
+	SQL := "SELECT customers.id, orders.id, products.id, products.name, products.quantity, products.price, customers.address, customers.no_telp, orders.status FROM orders_detail JOIN customers ON orders_detail.id_user=customers.id JOIN products ON orders_detail.id_product=products.id JOIN orders ON orders_detail.id_order=orders.id WHERE id_order = ?"
+	rows, err := tx.QueryContext(ctx, SQL, orderId)
+	helper.PanicIfError(err)
+	defer rows.Close()
+
+	log.Println("repository",orderId)
+
+	order := domain.Orders_detail{}
+	if rows.Next() {
+		err := rows.Scan(&order.Id_user, &order.Id_order, &order.Id_product, &order.Name, &order.Quantity, &order.Price, &order.Address, &order.No_telp, &order.Status)
+		helper.PanicIfError(err)
+		return order, nil
+	} else {
+		return order, errors.New("the order is not found")
+	}
 }

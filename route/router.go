@@ -22,6 +22,7 @@ func NewRouter(customerController controller.CustomerController, productControll
 	router.DELETE("/api/products/:productId", productController.Delete)
 
 	router.POST("/api/orders", orderController.Create)
+	router.GET("/api/orders/:orderId", orderController.GetById)
 
 	router.PanicHandler = exception.ErrorHandle
 

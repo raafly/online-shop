@@ -54,8 +54,7 @@ func (service *CustomerServiceImpl) Register(ctx context.Context ,request web.Cu
 
 	customer = service.CustomerRepository.Register(ctx, tx, customer)
 
-	return helper.ToCustomerResponse(customer)
-	
+	return helper.ToCustomerResponse(customer)	
 }
 
 func (service *CustomerServiceImpl) Login(ctx context.Context, request web.CustomerLoginRequest) (response web.LoginSuccess, token string) {

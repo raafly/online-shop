@@ -43,3 +43,14 @@ func (service *OrderServiceImpl) Create(ctx context.Context, request web.OrderCr
 	order = service.OrderRepository.Create(ctx, tx, order)
 	return helper.ToOrderReponse(order)
 }
+
+func (service *OrderServiceImpl) GetById(ctx context.Context, orderId int) web.OrderDetailResponse {
+	tx, err := service.DB.Begin()
+	defer helper.CommitOrRollback(tx)
+	helper.PanicIfError(err)
+
+	orderDetail, err := service.OrderRepository.GetById(ctx, tx, orderId)
+	helper.PanicIfError(err)
+
+	return helper.ToOrderDetailResponse(orderDetail)	
+}

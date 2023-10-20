@@ -46,3 +46,17 @@ func ToOrderReponse(order domain.Orders) web.OrderSuccess {
 		Note: order.Note,
 	}
 }
+
+func ToOrderDetailResponse(orderDetail domain.Orders_detail) web.OrderDetailResponse {
+	return web.OrderDetailResponse {
+		Id_user: orderDetail.Id_user,
+		Id_product: orderDetail.Id_product,
+		Id_order: orderDetail.Id_order,
+		Product_name: orderDetail.Name,
+		Product_quantity: orderDetail.Quantity,
+		Product_price: uint(orderDetail.Price),
+		Customer_address: orderDetail.Address,
+		Customer_noTelp: orderDetail.No_telp,
+		Order_status: orderDetail.Status,
+	}
+}

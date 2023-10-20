@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/raafly/catering/helper"
@@ -32,4 +34,21 @@ func (controller *OrderControllerImpl) Create(w http.ResponseWriter, r *http.Req
 	} 
 
 	helper.WriteToRequestBody(w, webResponse)
+}
+
+func (controller *OrderControllerImpl) GetById(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	ordertId := params.ByName("orderId")
+	id, err := strconv.Atoi(ordertId)
+	helper.PanicIfError(err)
+
+	log.Println("repository controller", id)
+
+	order := controller.OrderService.GetById(r.Context(), id)
+	webResposen := web.WebResponse {
+		Code: 201,
+		Status: "SUCCESS",
+		Data: order,
+	}
+
+	helper.WriteToRequestBody(w, webResposen)
 }
