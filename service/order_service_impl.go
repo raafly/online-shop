@@ -54,3 +54,28 @@ func (service *OrderServiceImpl) GetById(ctx context.Context, orderId int) web.O
 
 	return helper.ToOrderDetailResponse(orderDetail)	
 }
+
+func (service *OrderServiceImpl) Update(ctx context.Context, request web.OrderUpateRequest) {
+	err := service.Validate.Struct(request)
+	helper.PanicIfError(err)
+
+	tx, err := service.DB.Begin()
+	defer helper.CommitOrRollback(tx)
+	helper.PanicIfError(err)
+
+	order := domain.Orders_detail {
+		Id_order: request.Id_order,
+		Quantity: request.Quantity,
+	}
+	
+	service.OrderRepository.Update(ctx, tx, order)
+}
+
+func (service *OrderServiceImpl) Delete(ctx context.Context, orderId int) { 
+	tx, err := service.DB.Begin()
+	defer helper.CommitOrRollback(tx)
+	helper.PanicIfError(err)
+	
+	service.OrderRepository.Delete(ctx, tx, orderId)
+}
+

@@ -46,3 +46,15 @@ func (repository *OrderRepositoryImpl) GetById(ctx context.Context, tx *sql.Tx, 
 		return order, errors.New("the order is not found")
 	}
 }
+
+func (repository *OrderRepositoryImpl) Update(ctx context.Context, tx *sql.Tx, order domain.Orders_detail) { 
+	SQL := "UPDATE orders_detail SET quantity = ? WHERE id_order = ?"
+	_, err := tx.ExecContext(ctx, SQL, order.Quantity, order.Id_order)
+	helper.PanicIfError(err)
+}
+
+func (repository *OrderRepositoryImpl) Delete(ctx context.Context, tx *sql.Tx, orderId int) {
+	SQL := "DELETE FROM orders_detail WHERE id_order = ?"
+	_, err := tx.ExecContext(ctx, SQL, orderId)
+	helper.PanicIfError(err)
+}

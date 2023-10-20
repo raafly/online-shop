@@ -36,3 +36,8 @@ type OrderDetailResponse struct {
 	Customer_noTelp		string	`json:"noTelp"`
 	Order_status		string	`json:"status"`
 }
+
+type OrderUpateRequest struct { 
+	Id_order		int		`json:"id_order" validate:"required"`
+	Quantity		int		`json:"quantity" validate:"required"`
+}
